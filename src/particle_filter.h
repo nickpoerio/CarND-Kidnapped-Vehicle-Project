@@ -30,7 +30,9 @@ class ParticleFilter {
 	// Number of particles to draw
 	int num_particles; 
 	
-	
+	double std_x;
+	double std_y;
+	double std_theta;
 	
 	// Flag, if filter is initialized
 	bool is_initialized;
