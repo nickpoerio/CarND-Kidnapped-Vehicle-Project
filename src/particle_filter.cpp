@@ -37,7 +37,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	
 	particles.reserve(num_particles);
 	
-	for(i=0;i<num_particles;i++){
+	for(unsigned int i=0;i<num_particles;i++){
 	  particles.push_back();
 	  particles(i).x=dist_x(gen);
 	  particles(i).y=dist_y(gen);
@@ -45,7 +45,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	  particles(i).weight=1;
 	  }
 	  
-	is_initialized = True;
+	is_initialized = true;
 }
 
 void ParticleFilter::prediction(double delta_t, double std_pos[], double velocity, double yaw_rate) {
@@ -56,14 +56,14 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	//avoid division by zero
 	default_random_engine gen;
 	
-	for(i=0;i<num_particles;i++){
+	for(unsigned int i=0;i<num_particles;i++){
 	  if (fabs(particles(i).theta) > 0.001) {
-	    particles(i).x=particles(i).x+velocity/yaw_rate*(sin(particles(i).theta + yaw_rate*delta_t) - sin(particles(i).theta));
-		particles(i).y=particles(i).y+velocity/yaw_rate*(-cos(particles(i).theta + yaw_rate*delta_t) + cos(particles(i).theta));
-		particles(i).theta=particles(i).theta+yaw_rate*delta_t;
+	    particles(i).x += velocity/yaw_rate*(sin(particles(i).theta + yaw_rate*delta_t) - sin(particles(i).theta));
+		particles(i).y += velocity/yaw_rate*(-cos(particles(i).theta + yaw_rate*delta_t) + cos(particles(i).theta));
+		particles(i).theta += yaw_rate*delta_t;
 	  } else {
-	    particles(i).x=particles(i).x+velocity*delta_t*cos(particles(i).theta)
-	    particles(i).y=particles(i).y+velocity*delta_t*sin(particles(i).theta)
+	    particles(i).x += velocity*delta_t*cos(particles(i).theta)
+	    particles(i).y += velocity*delta_t*sin(particles(i).theta)
 	  }
 	  normal_distribution<double> dist_x(particles(i).x, std_x);
 	  normal_distribution<double> dist_y(particles(i).y, std_y);
@@ -80,9 +80,18 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::ve
 	//   observed measurement to this particular landmark.
 	// NOTE: this method will NOT be called by the grading code. But you will probably find it useful to 
 	//   implement this method and use it as a helper during the updateWeights phase.
-	
-	vector<LandmarkObs> distance;
-    min_element(distance.begin(), distance.end()); 
+	double distance;
+	double tmp_dist;
+	for(unsigned int j=0,j<observations.size(),j++){
+	  distance = 1e6;
+	  for(unsigned int i=0;i<predicted.size();i++){
+		tmp_dist = sqrt(pow(predicted(i).x-observations(j).x,2)+pow(predicted(i).y-observations(j).y,2));
+		if(tmp_dist<distance){
+		  distance = tmp_dist;
+		  observations(j).id = i;
+		}
+	  }
+	}
 }
 
 void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], 
