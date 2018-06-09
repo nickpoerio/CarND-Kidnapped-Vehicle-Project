@@ -133,7 +133,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	
 	for(int i=0;i<num_particles;i++){
 
-	  for(unsigned int j=0;i<observations.size();j++){
+	  for(unsigned int j=0;j<observations.size();j++){
 	    
 		// transform observations
         obs_map_x = observations[j].x*cos(particles[i].theta)-observations[j].y*sin(particles[i].theta)+particles[i].x;
