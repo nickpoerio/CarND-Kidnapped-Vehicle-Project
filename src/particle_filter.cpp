@@ -37,10 +37,10 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	
 	for(unsigned int i=0;i<num_particles;i++){
 	  particles.push_back();
-	  particles(i).x=dist_x(gen);
-	  particles(i).y=dist_y(gen);
-	  particles(i).theta=dist_theta(gen);
-	  particles(i).weight=1;
+	  particles(i).x = dist_x(gen);
+	  particles(i).y = dist_y(gen);
+	  particles(i).theta = dist_theta(gen);
+	  particles(i).weight = 1.;
 	}
 	  
 	is_initialized = true;
@@ -57,8 +57,8 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	for(unsigned int i=0;i<num_particles;i++){
 	
 	  if (fabs(particles(i).theta) > 0.001) {
-	    particles(i).x += velocity/yaw_rate*(sin(particles(i).theta + yaw_rate*delta_t)-sin(particles(i).theta));
-		particles(i).y += velocity/yaw_rate*(-cos(particles(i).theta + yaw_rate*delta_t)+cos(particles(i).theta));
+	    particles(i).x += velocity/yaw_rate*(sin(particles(i).theta+yaw_rate*delta_t)-sin(particles(i).theta));
+		particles(i).y += velocity/yaw_rate*(-cos(particles(i).theta+yaw_rate*delta_t)+cos(particles(i).theta));
 		particles(i).theta += yaw_rate*delta_t;
 	  } else {
 	    particles(i).x += velocity*delta_t*cos(particles(i).theta)
@@ -151,7 +151,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         argmin = distance(landmark_distances.begin(),min_element(landmark_distances.begin(),landmark_distances.end()));
       
         // Multi-variate Gaussian distribution
-        Gauss_dist *= exp(-pow(obs_map_x - landmarks(argmin).x_f,2)/xden-pow(obs_map_y - landmarks(argmin).y_f,2)/yden)/coeff;
+        Gauss_dist *= exp(-pow(obs_map_x-landmarks(argmin).x_f,2)/xden-pow(obs_map_y-landmarks(argmin).y_f,2)/yden)/coeff;
 	  }
 	  particles(i).weight = Gauss_dist;
 	  weights(i) = Gauss_dist;
