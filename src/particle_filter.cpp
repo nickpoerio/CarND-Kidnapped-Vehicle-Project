@@ -29,18 +29,18 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 
 	fill(weights.begin(),weights.end(),1);
 	
-	normal_distribution<double> dist_x(x, std(0));
-	normal_distribution<double> dist_y(y, std(1));
-	normal_distribution<double> dist_theta(theta, std(2));
+	normal_distribution<double> dist_x(x, std[0]);
+	normal_distribution<double> dist_y(y, std[1]);
+	normal_distribution<double> dist_theta(theta, std[2]);
 	
 	particles.reserve(num_particles);
 	
 	for(unsigned int i=0;i<num_particles;i++){
 	  particles.push_back();
-	  particles(i).x = dist_x(gen);
-	  particles(i).y = dist_y(gen);
-	  particles(i).theta = dist_theta(gen);
-	  particles(i).weight = 1.;
+	  particles[i].x = dist_x(gen);
+	  particles[i].y = dist_y(gen);
+	  particles[i].theta = dist_theta(gen);
+	  particles[i].weight = 1.;
 	}
 	  
 	is_initialized = true;
@@ -56,21 +56,21 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	
 	for(unsigned int i=0;i<num_particles;i++){
 	
-	  if (fabs(particles(i).theta) > 0.001) {
-	    particles(i).x += velocity/yaw_rate*(sin(particles(i).theta+yaw_rate*delta_t)-sin(particles(i).theta));
-		particles(i).y += velocity/yaw_rate*(-cos(particles(i).theta+yaw_rate*delta_t)+cos(particles(i).theta));
-		particles(i).theta += yaw_rate*delta_t;
+	  if (fabs(particles[i].theta) > 0.001) {
+	    particles[i].x += velocity/yaw_rate*(sin(particles[i].theta+yaw_rate*delta_t)-sin(particles[i].theta));
+		particles[i].y += velocity/yaw_rate*(-cos(particles[i].theta+yaw_rate*delta_t)+cos(particles[i].theta));
+		particles[i].theta += yaw_rate*delta_t;
 	  } else {
-	    particles(i).x += velocity*delta_t*cos(particles(i).theta)
-	    particles(i).y += velocity*delta_t*sin(particles(i).theta)
+	    particles[i].x += velocity*delta_t*cos(particles[i].theta)
+	    particles[i].y += velocity*delta_t*sin(particles[i].theta)
 	  }
-	  normal_distribution<double> dist_x(particles(i).x, std_pos(0));
-	  normal_distribution<double> dist_y(particles(i).y, std_pos(1));
-	  normal_distribution<double> dist_theta(particles(i).theta, std_pos(2));
+	  normal_distribution<double> dist_x(particles[i].x, std_pos[0]);
+	  normal_distribution<double> dist_y(particles[i].y, std_pos[1]);
+	  normal_distribution<double> dist_theta(particles[i].theta, std_pos[2]);
 	  
-	  particles(i).x = dist_x(gen);
-	  particles(i).y = dist_y(gen);
-	  particles(i).theta = dist_theta(gen);
+	  particles[i].x = dist_x(gen);
+	  particles[i].y = dist_y(gen);
+	  particles[i].theta = dist_theta(gen);
 	}
 }
 
@@ -112,9 +112,9 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	//   http://planning.cs.uiuc.edu/node99.html
 	
 	//initialize variables
-	const double sxy = std_landmark(0)*std_landmark(1);
-	const double sxx = std_landmark(0)*std_landmark(0);
-	const double syy = std_landmark(1)*std_landmark(1);
+	const double sxy = std_landmark[0]*std_landmark[1];
+	const double sxx = std_landmark[0]*std_landmark[0];
+	const double syy = std_landmark([1]*std_landmark[1];
 	const double coeff = 2*M_PI*sxy;
 	const double xden = 2*sxx;
 	const double yden = 2*syy;
@@ -137,24 +137,24 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	  for(unsigned int j=0;i<observations.size();j++){
 	    
 		// transform observations
-        obs_map_x = observations(j).x*cos(particles(i).theta)-observations(j).y*sin(particles(i).theta)+particles(i).x;
-        obs_map_y = observations(j).x*sin(particles(i).theta)+observations(j).y*cos(particles(i).theta)+particles(i).y;
+        obs_map_x = observations(j).x*cos(particles[i].theta)-observations(j).y*sin(particles[i].theta)+particles[i].x;
+        obs_map_y = observations(j).x*sin(particles[i].theta)+observations(j).y*cos(particles[i].theta)+particles[i].y;
 	  
 		for (unsigned int k=0;k<landmarks.size();k++) {
         
 		  // within sensor range
-          particle_distance = sqrt(pow(particles(i).x-landmarks(k).x_f,2)+pow(particles(i).y-landmarks(k).y_f,2));
+          particle_distance = sqrt(pow(particles[i].x-landmarks[k].x_f,2)+pow(particles[i].y-landmarks[k].y_f,2));
           if (particle_distance <= sensor_range)
-            landmark_distances(k) = sqrt(pow(obs_map_x-landmarks(k).x_f,2)+pow(obs_map_y-landmarks(k).y_f,2));
+            landmark_distances(k) = sqrt(pow(obs_map_x-landmarks[k].x_f,2)+pow(obs_map_y-landmarks[k].y_f,2));
 	    }
 		// nearest neighbor
         argmin = distance(landmark_distances.begin(),min_element(landmark_distances.begin(),landmark_distances.end()));
       
         // Multi-variate Gaussian distribution
-        Gauss_dist *= exp(-pow(obs_map_x-landmarks(argmin).x_f,2)/xden-pow(obs_map_y-landmarks(argmin).y_f,2)/yden)/coeff;
+        Gauss_dist *= exp(-pow(obs_map_x-landmarks[argmin].x_f,2)/xden-pow(obs_map_y-landmarks[argmin].y_f,2)/yden)/coeff;
 	  }
-	  particles(i).weight = Gauss_dist;
-	  weights(i) = Gauss_dist;
+	  particles[i].weight = Gauss_dist;
+	  weights[i] = Gauss_dist;
 	}
 }
 
@@ -172,7 +172,7 @@ void ParticleFilter::resample() {
   
     for (unsigned int i=0;i<num_particles;i++) {
       discrete_distribution<int> idx(weights.begin(), weights.end());
-      resampled_particles(i) = particles(idx(gen));
+      resampled_particles[i] = particles[idx(gen)];
     }
 	
     // Resample
