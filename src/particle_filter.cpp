@@ -35,7 +35,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	
 	particles.reserve(num_particles);
 	
-	for(unsigned int i=0;i<num_particles;i++){
+	for(int i=0;i<num_particles;i++){
 	  particles[i].x = dist_x(gen);
 	  particles[i].y = dist_y(gen);
 	  particles[i].theta = dist_theta(gen);
@@ -53,7 +53,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	//avoid division by zero
 	default_random_engine gen;
 	
-	for(unsigned int i=0;i<num_particles;i++){
+	for(int i=0;i<num_particles;i++){
 	
 	  if (fabs(particles[i].theta) > 0.001) {
 	    particles[i].x += velocity/yaw_rate*(sin(particles[i].theta+yaw_rate*delta_t)-sin(particles[i].theta));
@@ -113,7 +113,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	//initialize variables
 	const double sxy = std_landmark[0]*std_landmark[1];
 	const double sxx = std_landmark[0]*std_landmark[0];
-	const double syy = std_landmark([1]*std_landmark[1];
+	const double syy = std_landmark[1]*std_landmark[1];
 	const double coeff = 2*M_PI*sxy;
 	const double xden = 2*sxx;
 	const double yden = 2*syy;
@@ -131,7 +131,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	
 	//variable initialization end
 	
-	for(unsigned int i=0;i<num_particles;i++){
+	for(int i=0;i<num_particles;i++){
 
 	  for(unsigned int j=0;i<observations.size();j++){
 	    
@@ -144,7 +144,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		  // within sensor range
           particle_distance = sqrt(pow(particles[i].x-landmarks[k].x_f,2)+pow(particles[i].y-landmarks[k].y_f,2));
           if (particle_distance <= sensor_range)
-            landmark_distances(k) = sqrt(pow(obs_map_x-landmarks[k].x_f,2)+pow(obs_map_y-landmarks[k].y_f,2));
+            landmark_distances[k] = sqrt(pow(obs_map_x-landmarks[k].x_f,2)+pow(obs_map_y-landmarks[k].y_f,2));
 	    }
 		// nearest neighbor
         argmin = distance(landmark_distances.begin(),min_element(landmark_distances.begin(),landmark_distances.end()));
@@ -169,7 +169,7 @@ void ParticleFilter::resample() {
     random_device rd;
     default_random_engine gen(rd());
   
-    for (unsigned int i=0;i<num_particles;i++) {
+    for (int i=0;i<num_particles;i++) {
       discrete_distribution<int> idx(weights.begin(), weights.end());
       resampled_particles[i] = particles[idx(gen)];
     }
