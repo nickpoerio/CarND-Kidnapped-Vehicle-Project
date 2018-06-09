@@ -110,6 +110,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	//   and the following is a good resource for the actual equation to implement (look at equation 
 	//   3.33
 	//   http://planning.cs.uiuc.edu/node99.html
+	
+	//initialize variables
 	const double sxy = std_landmark(0)*std_landmark(1);
 	const double sxx = std_landmark(0)*std_landmark(0);
 	const double syy = std_landmark(1)*std_landmark(1);
@@ -128,10 +130,13 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		
 	fill(landmark_distances.begin(),landmark_distances.end(),1e6);
 	
+	//variable initialization end
+	
 	for(unsigned int i=0;i<num_particles;i++){
 
 	  for(unsigned int j=0;i<observations.size();j++){
 	    
+		// transform observations
         obs_map_x = observations(j).x*cos(particles(i).theta)-observations(j).y*sin(particles(i).theta)+particles(i).x;
         obs_map_y = observations(j).x*sin(particles(i).theta)+observations(j).y*cos(particles(i).theta)+particles(i).y;
 	  
