@@ -72,6 +72,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	  particles[i].y = dist_y(gen);
 	  particles[i].theta = dist_theta(gen);
 	}
+	cout << i;
 }
 
 void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& observations) {
@@ -165,6 +166,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	  }
 	  particles[i].weight = Gauss_dist;
 	  weights[i] = Gauss_dist;
+	  cout << Gauss_dist;
 	}
 }
 
