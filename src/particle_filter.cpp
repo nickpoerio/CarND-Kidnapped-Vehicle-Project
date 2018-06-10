@@ -118,8 +118,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	const double coeff = 2*M_PI*sxy;
 	const double xden = 2*sxx;
 	const double yden = 2*syy;
-	double Gauss_dist = 1.;
 	
+	double Gauss_dist;
 	double obs_map_x, obs_map_y;
 	double particle_distance;
 	
@@ -138,6 +138,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	  particles[i].associations.clear();
 	  particles[i].sense_x.clear();
 	  particles[i].sense_y.clear();
+	  
+	  Gauss_dist = 1.
 
 	  for(unsigned int j=0;j<observations.size();j++){
 	    
