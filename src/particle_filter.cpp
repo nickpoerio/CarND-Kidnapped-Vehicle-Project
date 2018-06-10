@@ -40,7 +40,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	  particles[i].y = dist_y(gen);
 	  particles[i].theta = dist_theta(gen);
 	  particles[i].weight = 1.;
-	  weights[i]=1.
+	  weights[i] = 1.;
 	}
 	  
 	is_initialized = true;
