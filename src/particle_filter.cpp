@@ -127,9 +127,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	
 	vector<Map::single_landmark_s> landmarks = map_landmarks.landmark_list;
     vector<double> landmark_distances(landmarks.size());
-		
-	fill(landmark_distances.begin(),landmark_distances.end(),1e6);
-	
 	
 	//variable initialization end
 	
@@ -149,6 +146,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		
 		//particles[i].sense_x.push_back(obs_map_x);
 		//particles[i].sense_y.push_back(obs_map_y);
+		
+		fill(landmark_distances.begin(),landmark_distances.end(),1e6);
 	  
 		for (unsigned int k=0;k<landmarks.size();k++) {
         
