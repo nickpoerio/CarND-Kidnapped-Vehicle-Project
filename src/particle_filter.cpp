@@ -139,7 +139,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	  particles[i].sense_x.clear();
 	  particles[i].sense_y.clear();
 	  
-	  Gauss_dist = 1.
+	  Gauss_dist = 1.;
 
 	  for(unsigned int j=0;j<observations.size();j++){
 	    
