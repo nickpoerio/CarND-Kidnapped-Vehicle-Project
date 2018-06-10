@@ -115,7 +115,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	const double sxy = std_landmark[0]*std_landmark[1];
 	const double sxx = std_landmark[0]*std_landmark[0];
 	const double syy = std_landmark[1]*std_landmark[1];
-	const double coeff = 2*M_PI*sxy;
+	const double xyden = sqrt(2*M_PI*sxy);
 	const double xden = 2*sxx;
 	const double yden = 2*syy;
 	
@@ -162,7 +162,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		particles[i].associations.push_back(argmin);
       
         // Multi-variate Gaussian distribution
-        Gauss_dist *= exp(-pow(obs_map_x-landmarks[argmin].x_f,2)/xden-pow(obs_map_y-landmarks[argmin].y_f,2)/yden)/coeff;
+        Gauss_dist *= exp(-pow(obs_map_x-landmarks[argmin].x_f,2)/xden-pow(obs_map_y-landmarks[argmin].y_f,2)/yden)/xyden;
 	  }
 	  particles[i].weight = Gauss_dist;
 	  weights[i] = Gauss_dist;
