@@ -130,9 +130,14 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		
 	fill(landmark_distances.begin(),landmark_distances.end(),1e6);
 	
+	
 	//variable initialization end
 	
 	for(int i=0;i<num_particles;i++){
+	  
+	  particles[i].associations.clear();
+	  particles[i].sense_x.clear();
+	  particles[i].sense_y.clear();
 
 	  for(unsigned int j=0;j<observations.size();j++){
 	    
