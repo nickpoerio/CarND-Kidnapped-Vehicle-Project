@@ -36,6 +36,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	particles.reserve(num_particles);
 	
 	for(int i=0;i<num_particles;i++){
+	  particles[i].id = i;
 	  particles[i].x = dist_x(gen);
 	  particles[i].y = dist_y(gen);
 	  particles[i].theta = dist_theta(gen);
@@ -138,6 +139,9 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		// transform observations
         obs_map_x = observations[j].x*cos(particles[i].theta)-observations[j].y*sin(particles[i].theta)+particles[i].x;
         obs_map_y = observations[j].x*sin(particles[i].theta)+observations[j].y*cos(particles[i].theta)+particles[i].y;
+		
+		particles[i].sense_x.push_back(obs_map_x);
+		particles[i].sense_y.push_back(obs_map_y);
 	  
 		for (unsigned int k=0;k<landmarks.size();k++) {
         
@@ -148,6 +152,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	    }
 		// nearest neighbor
         argmin = distance(landmark_distances.begin(),min_element(landmark_distances.begin(),landmark_distances.end()));
+		particles[i].associations.push_back(argmin);
       
         // Multi-variate Gaussian distribution
         Gauss_dist *= exp(-pow(obs_map_x-landmarks[argmin].x_f,2)/xden-pow(obs_map_y-landmarks[argmin].y_f,2)/yden)/coeff;
