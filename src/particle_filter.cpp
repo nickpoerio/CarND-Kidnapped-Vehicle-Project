@@ -112,12 +112,11 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	//   http://planning.cs.uiuc.edu/node99.html
 	
 	//initialize variables
-	const double sxy = std_landmark[0]*std_landmark[1];
 	const double sxx = std_landmark[0]*std_landmark[0];
 	const double syy = std_landmark[1]*std_landmark[1];
-	const double xyden = sqrt(2*M_PI*sxy);
-	const double xden = 2*sxx;
-	const double yden = 2*syy;
+	const double xyden = 2*M_PI*sxx*syy;
+	const double xden = 2*sxx*sxx;
+	const double yden = 2*syy*syy;
 	
 	double Gauss_dist;
 	double obs_map_x, obs_map_y;
@@ -178,8 +177,7 @@ void ParticleFilter::resample() {
     vector<Particle> resampled_particles(num_particles);
   
     // discrete distribution resamples particles by weight
-    random_device rd;
-    default_random_engine gen(rd());
+    default_random_engine gen;
   
     for (int i=0;i<num_particles;i++) {
       discrete_distribution<int> idx(weights.begin(), weights.end());
