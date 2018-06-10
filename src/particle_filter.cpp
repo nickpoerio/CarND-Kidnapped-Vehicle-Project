@@ -166,7 +166,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	  }
 	  particles[i].weight = Gauss_dist;
 	  weights[i] = Gauss_dist;
-	  cout << Gauss_dist;
 	}
 }
 
