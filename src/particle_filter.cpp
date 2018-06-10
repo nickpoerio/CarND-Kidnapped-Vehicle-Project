@@ -27,13 +27,12 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	default_random_engine gen;
 	num_particles = 100;
 
-	fill(weights.begin(),weights.end(),1);
-	
 	normal_distribution<double> dist_x(x, std[0]);
 	normal_distribution<double> dist_y(y, std[1]);
 	normal_distribution<double> dist_theta(theta, std[2]);
-	cout << "init ini";
+	
 	particles.reserve(num_particles);
+	weights.reserve(num_particles);
 	
 	for(int i=0;i<num_particles;i++){
 	  particles[i].id = i;
@@ -41,10 +40,10 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	  particles[i].y = dist_y(gen);
 	  particles[i].theta = dist_theta(gen);
 	  particles[i].weight = 1.;
+	  weights[i]=1.
 	}
 	  
 	is_initialized = true;
-	cout << "init ok";
 }
 
 void ParticleFilter::prediction(double delta_t, double std_pos[], double velocity, double yaw_rate) {
