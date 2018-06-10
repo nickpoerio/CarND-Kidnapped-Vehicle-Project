@@ -72,7 +72,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	  particles[i].y = dist_y(gen);
 	  particles[i].theta = dist_theta(gen);
 	}
-	cout << i;
+	cout << "ok";
 }
 
 void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& observations) {
