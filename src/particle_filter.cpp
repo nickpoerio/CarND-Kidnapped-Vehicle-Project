@@ -134,9 +134,9 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	
 	for(int i=0;i<num_particles;i++){
 	  
-	  particles[i].associations.clear();
-	  particles[i].sense_x.clear();
-	  particles[i].sense_y.clear();
+	  //particles[i].associations.clear();
+	  //particles[i].sense_x.clear();
+	  //particles[i].sense_y.clear();
 	  
 	  Gauss_dist = 1.;
 
@@ -146,8 +146,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         obs_map_x = observations[j].x*cos(particles[i].theta)-observations[j].y*sin(particles[i].theta)+particles[i].x;
         obs_map_y = observations[j].x*sin(particles[i].theta)+observations[j].y*cos(particles[i].theta)+particles[i].y;
 		
-		particles[i].sense_x.push_back(obs_map_x);
-		particles[i].sense_y.push_back(obs_map_y);
+		//particles[i].sense_x.push_back(obs_map_x);
+		//particles[i].sense_y.push_back(obs_map_y);
 	  
 		for (unsigned int k=0;k<landmarks.size();k++) {
         
@@ -158,7 +158,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	    }
 		// nearest neighbor
         argmin = distance(landmark_distances.begin(),min_element(landmark_distances.begin(),landmark_distances.end()));
-		particles[i].associations.push_back(argmin);
+		//particles[i].associations.push_back(argmin);
       
         // Multi-variate Gaussian distribution
         Gauss_dist *= exp(-pow(obs_map_x-landmarks[argmin].x_f,2)/xden-pow(obs_map_y-landmarks[argmin].y_f,2)/yden)/xyden;
