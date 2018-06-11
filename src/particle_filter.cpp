@@ -31,8 +31,8 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	normal_distribution<double> dist_y(y, std[1]);
 	normal_distribution<double> dist_theta(theta, std[2]);
 	
-	particles.reserve(num_particles);
-	weights.reserve(num_particles);
+	particles.resize(num_particles);
+	weights.resize(num_particles);
 	
 	for(int i=0;i<num_particles;i++){
 	  particles[i].id = i;
@@ -127,7 +127,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	int argmin;
 	
 	vector<Map::single_landmark_s> landmarks = map_landmarks.landmark_list;
-    vector<double> landmark_distances(landmarks.size());
+    vector<double> landmark_distances (landmarks.size());
 	
 	//variable initialization end
 	
@@ -175,7 +175,7 @@ void ParticleFilter::resample() {
 	//   http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution
     
 	// Vector for resampled particles
-    vector<Particle> resampled_particles(num_particles);
+    vector<Particle> resampled_particles (num_particles);
   
     // discrete distribution resamples particles by weight
     default_random_engine gen;
