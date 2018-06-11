@@ -147,7 +147,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		//particles[i].sense_x.push_back(obs_map_x);
 		//particles[i].sense_y.push_back(obs_map_y);
 		
-		fill(landmark_distances.begin(),landmark_distances.end(),1e6);
+		fill(landmark_distances.begin(),landmark_distances.end(),sensor_range*10.);
 	  
 		for (unsigned int k=0;k<landmarks.size();k++) {
         
