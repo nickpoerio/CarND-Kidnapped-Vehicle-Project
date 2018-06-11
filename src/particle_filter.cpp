@@ -54,6 +54,10 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	//avoid division by zero
 	default_random_engine gen;
 	
+	normal_distribution<double> dist_x(0, std_pos[0]);
+	normal_distribution<double> dist_y(0, std_pos[1]);
+	normal_distribution<double> dist_theta(0, std_pos[2]);
+	
 	for(int i=0;i<num_particles;i++){
 	
 	  if (fabs(yaw_rate) > 0.001) {
@@ -64,13 +68,10 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	    particles[i].x += velocity*delta_t*cos(particles[i].theta);
 	    particles[i].y += velocity*delta_t*sin(particles[i].theta);
 	  }
-	  normal_distribution<double> dist_x(particles[i].x, std_pos[0]);
-	  normal_distribution<double> dist_y(particles[i].y, std_pos[1]);
-	  normal_distribution<double> dist_theta(particles[i].theta, std_pos[2]);
 	  
-	  particles[i].x = dist_x(gen);
-	  particles[i].y = dist_y(gen);
-	  particles[i].theta = dist_theta(gen);
+	  particles[i].x += dist_x(gen);
+	  particles[i].y += dist_y(gen);
+	  particles[i].theta += dist_theta(gen);
 	}
 }
 
@@ -152,8 +153,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		for (unsigned int k=0;k<landmarks.size();k++) {
         
 		  // within sensor range
-          //particle_distance = sqrt(pow(particles[i].x-landmarks[k].x_f,2)+pow(particles[i].y-landmarks[k].y_f,2));
-          //if (particle_distance <= sensor_range)
+          particle_distance = sqrt(pow(particles[i].x-landmarks[k].x_f,2)+pow(particles[i].y-landmarks[k].y_f,2));
+          if (particle_distance <= sensor_range)
             landmark_distances[k] = sqrt(pow(obs_map_x-landmarks[k].x_f,2)+pow(obs_map_y-landmarks[k].y_f,2));
 	    }
 		// nearest neighbor
