@@ -132,11 +132,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	//variable initialization end
 	
 	for(int i=0;i<num_particles;i++){
-	  
-	  //particles[i].associations.clear();
-	  //particles[i].sense_x.clear();
-	  //particles[i].sense_y.clear();
-	  
+	  	  
 	  Gauss_dist = 1.;
 
 	  for(unsigned int j=0;j<observations.size();j++){
@@ -144,10 +140,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		// transform observations
         obs_map_x = observations[j].x*cos(particles[i].theta)-observations[j].y*sin(particles[i].theta)+particles[i].x;
         obs_map_y = observations[j].x*sin(particles[i].theta)+observations[j].y*cos(particles[i].theta)+particles[i].y;
-		
-		//particles[i].sense_x.push_back(obs_map_x);
-		//particles[i].sense_y.push_back(obs_map_y);
-		
+				
 		fill(landmark_distances.begin(),landmark_distances.end(),sensor_range*10.);
 	  
 		for (unsigned int k=0;k<landmarks.size();k++) {
@@ -159,7 +152,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	    }
 		// nearest neighbor
         argmin = distance(landmark_distances.begin(),min_element(landmark_distances.begin(),landmark_distances.end()));
-		//particles[i].associations.push_back(argmin);
       
         // Multi-variate Gaussian distribution
         Gauss_dist *= exp(-pow(obs_map_x-landmarks[argmin].x_f,2)/xden-pow(obs_map_y-landmarks[argmin].y_f,2)/yden)/xyden;
@@ -179,11 +171,10 @@ void ParticleFilter::resample() {
   
     // discrete distribution resamples particles by weight
     default_random_engine gen;
+	discrete_distribution<int> idx(weights.begin(), weights.end());
   
-    for (int i=0;i<num_particles;i++) {
-      discrete_distribution<int> idx(weights.begin(), weights.end());
+    for (int i=0;i<num_particles;i++)
       resampled_particles[i] = particles[idx(gen)];
-    }
 	
     // Resample
     particles = resampled_particles;
@@ -197,10 +188,6 @@ Particle ParticleFilter::SetAssociations(Particle& particle, const std::vector<i
     // sense_x: the associations x mapping already converted to world coordinates
     // sense_y: the associations y mapping already converted to world coordinates
 	
-	particle.associations.clear();
-	particle.sense_x.clear();
-	particle.sense_y.clear();
-
     particle.associations= associations;
     particle.sense_x = sense_x;
     particle.sense_y = sense_y;
