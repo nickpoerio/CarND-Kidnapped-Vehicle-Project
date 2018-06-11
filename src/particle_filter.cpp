@@ -72,7 +72,6 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	  particles[i].y = dist_y(gen);
 	  particles[i].theta = dist_theta(gen);
 	}
-	cout << "ok";
 }
 
 void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& observations) {
@@ -113,11 +112,12 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	//   http://planning.cs.uiuc.edu/node99.html
 	
 	//initialize variables
-	const double sxx = std_landmark[0]*std_landmark[0];
-	const double syy = std_landmark[1]*std_landmark[1];
-	const double xyden = 2*M_PI*sxx*syy;
-	const double xden = 2*sxx*sxx;
-	const double yden = 2*syy*syy;
+	const double sx = std_landmark[0];
+	const double sy = std_landmark[1];
+	
+	const double xyden = 2*M_PI*sx*sy;
+	const double xden = 2*sx*sx;
+	const double yden = 2*sy*sy;
 	
 	double Gauss_dist;
 	double obs_map_x, obs_map_y;
