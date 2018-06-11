@@ -152,8 +152,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		for (unsigned int k=0;k<landmarks.size();k++) {
         
 		  // within sensor range
-          particle_distance = sqrt(pow(particles[i].x-landmarks[k].x_f,2)+pow(particles[i].y-landmarks[k].y_f,2));
-          if (particle_distance <= sensor_range)
+          //particle_distance = sqrt(pow(particles[i].x-landmarks[k].x_f,2)+pow(particles[i].y-landmarks[k].y_f,2));
+          //if (particle_distance <= sensor_range)
             landmark_distances[k] = sqrt(pow(obs_map_x-landmarks[k].x_f,2)+pow(obs_map_y-landmarks[k].y_f,2));
 	    }
 		// nearest neighbor
